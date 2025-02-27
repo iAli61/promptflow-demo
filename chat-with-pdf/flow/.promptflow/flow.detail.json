@@ -1,0 +1,311 @@
+{
+  "flow_runs": [
+    {
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "status": "Completed",
+      "error": null,
+      "inputs": {
+        "chat_history": [],
+        "pdf_url": "https://arxiv.org/pdf/1810.04805.pdf",
+        "question": "What is the name of the new language representation model introduced in the document?",
+        "config": {
+          "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+          "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+          "PROMPT_TOKEN_LIMIT": 3000,
+          "MAX_COMPLETION_TOKENS": 1024,
+          "VERBOSE": true,
+          "CHUNK_SIZE": 1024,
+          "CHUNK_OVERLAP": 64
+        }
+      },
+      "output": {
+        "answer": "The name of the new language representation model discussed in the research paper is BERT: Bidirectional Encoder Representations from Transformers.",
+        "context": [
+          "Mike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat",
+          ", pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, ",
+          "f-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et ",
+          "n Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo",
+          "nguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t"
+        ]
+      },
+      "metrics": null,
+      "request": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "root_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "source_run_id": null,
+      "flow_id": "default_flow_id",
+      "start_time": "2025-02-27T08:50:51.285910Z",
+      "end_time": "2025-02-27T08:50:56.380505Z",
+      "index": 0,
+      "api_calls": [
+        {
+          "name": "flow",
+          "node_name": "flow",
+          "type": "Flow",
+          "start_time": 1740646251.28591,
+          "end_time": 1740646256.380505,
+          "children": [],
+          "system_metrics": {
+            "duration": 5.094595,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0
+          },
+          "inputs": {
+            "chat_history": [],
+            "pdf_url": "https://arxiv.org/pdf/1810.04805.pdf",
+            "question": "What is the name of the new language representation model introduced in the document?",
+            "config": {
+              "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+              "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+              "PROMPT_TOKEN_LIMIT": 3000,
+              "MAX_COMPLETION_TOKENS": 1024,
+              "VERBOSE": true,
+              "CHUNK_SIZE": 1024,
+              "CHUNK_OVERLAP": 64
+            }
+          },
+          "output": {
+            "answer": "The name of the new language representation model discussed in the research paper is BERT: Bidirectional Encoder Representations from Transformers.",
+            "context": [
+              "Mike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat",
+              ", pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, ",
+              "f-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et ",
+              "n Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo",
+              "nguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t"
+            ]
+          },
+          "error": null
+        }
+      ],
+      "name": "",
+      "description": "",
+      "tags": null,
+      "system_metrics": {
+        "duration": 5.094595,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "result": {
+        "answer": "The name of the new language representation model discussed in the research paper is BERT: Bidirectional Encoder Representations from Transformers.",
+        "context": [
+          "Mike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat",
+          ", pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, ",
+          "f-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et ",
+          "n Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo",
+          "nguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t"
+        ]
+      },
+      "upload_metrics": false,
+      "otel_trace_id": null,
+      "message_format": "basic"
+    }
+  ],
+  "node_runs": [
+    {
+      "node": "setup_env",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_setup_env_0",
+      "status": "Completed",
+      "inputs": {
+        "connection": "open_ai_connection",
+        "config": {
+          "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+          "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+          "PROMPT_TOKEN_LIMIT": 3000,
+          "MAX_COMPLETION_TOKENS": 1024,
+          "VERBOSE": true,
+          "CHUNK_SIZE": 1024,
+          "CHUNK_OVERLAP": 64
+        }
+      },
+      "output": "Ready",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:51.286906Z",
+      "end_time": "2025-02-27T08:50:51.287362Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.000456
+      },
+      "result": "Ready",
+      "message_format": "basic"
+    },
+    {
+      "node": "download_tool",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_download_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "url": "https://arxiv.org/pdf/1810.04805.pdf",
+        "env_ready_signal": "Ready"
+      },
+      "output": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:51.288558Z",
+      "end_time": "2025-02-27T08:50:51.930904Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T08:50:51+0000] Downloading pdf from https://arxiv.org/pdf/1810.04805.pdf\n",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.642346
+      },
+      "result": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf",
+      "message_format": "basic"
+    },
+    {
+      "node": "rewrite_question_tool",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_rewrite_question_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "question": "What is the name of the new language representation model introduced in the document?",
+        "history": [],
+        "env_ready_signal": "Ready"
+      },
+      "output": "What is the name of the new language representation model discussed in the research paper?",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:51.288848Z",
+      "end_time": "2025-02-27T08:50:54.757129Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T08:50:54+0000] Rewritten question: What is the name of the new language representation model discussed in the research paper?\n",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 3.468281
+      },
+      "result": "What is the name of the new language representation model discussed in the research paper?",
+      "message_format": "basic"
+    },
+    {
+      "node": "build_index_tool",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_build_index_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "pdf_path": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf"
+      },
+      "output": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:51.931474Z",
+      "end_time": "2025-02-27T08:50:51.932187Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T08:50:51+0000] Chunk size: 1024, chunk overlap: 64\n[2025-02-27T08:50:51+0000] Index path: /home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64\n[2025-02-27T08:50:51+0000] Index already exists, bypassing index creation\n",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.000713
+      },
+      "result": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64",
+      "message_format": "basic"
+    },
+    {
+      "node": "find_context_tool",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_find_context_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "question": "What is the name of the new language representation model discussed in the research paper?",
+        "index_path": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64"
+      },
+      "output": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nMike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat\n\n## Context #2\n, pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, \n\n## Context #3\nf-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et \n\n## Context #4\nn Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo\n\n## Context #5\nnguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t\n\n\n# Question\nWhat is the name of the new language representation model discussed in the research paper?",
+        "context": [
+          "Mike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat",
+          ", pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, ",
+          "f-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et ",
+          "n Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo",
+          "nguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t"
+        ]
+      },
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:54.757803Z",
+      "end_time": "2025-02-27T08:50:54.860485Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.102682
+      },
+      "result": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nMike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat\n\n## Context #2\n, pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, \n\n## Context #3\nf-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et \n\n## Context #4\nn Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo\n\n## Context #5\nnguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t\n\n\n# Question\nWhat is the name of the new language representation model discussed in the research paper?",
+        "context": [
+          "Mike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat",
+          ", pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, ",
+          "f-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et ",
+          "n Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo",
+          "nguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t"
+        ]
+      },
+      "message_format": "basic"
+    },
+    {
+      "node": "qna_tool",
+      "flow_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68",
+      "run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_qna_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nMike Schuster, Qi Ge,\nThorsten Brants, Phillipp Koehn, and Tony Robin-\nson. 2013. One billion word benchmark for measur-\ning progress in statistical language modeling. arXiv\npreprint arXiv:1312.3005 .\nZ. Chen, H. Zhang, X. Zhang, and L. Zhao. 2018.\nQuora question pairs.\nChristopher Clark and Matt Gardner. 2018. Simple\nand effective multi-paragraph reading comprehen-\nsion. In ACL.Kevin Clark, Minh-Thang Luong, Christopher D Man-\nning, and Quoc Le. 2018. Semi-supervised se-\nquence modeling with cross-view training. In Pro-\nceedings of the 2018 Conference on Empirical Meth-\nods in Natural Language Processing , pages 1914–\n1925.\nRonan Collobert and Jason Weston. 2008. A uniﬁed\narchitecture for natural language processing: Deep\nneural networks with multitask learning. In Pro-\nceedings of the 25th international conference on\nMachine learning , pages 160–167. ACM.\nAlexis Conneau, Douwe Kiela, Holger Schwenk, Lo ¨ıc\nBarrault, and Antoine Bordes. 2017. Supervised\nlearning of universal sentence representations from\nnat\n\n## Context #2\n, pages 1532–\n1543.\nMatthew Peters, Waleed Ammar, Chandra Bhagavat-\nula, and Russell Power. 2017. Semi-supervised se-\nquence tagging with bidirectional language models.\nInACL.\nMatthew Peters, Mark Neumann, Mohit Iyyer, Matt\nGardner, Christopher Clark, Kenton Lee, and Luke\nZettlemoyer. 2018a. Deep contextualized word rep-\nresentations. In NAACL .Matthew Peters, Mark Neumann, Luke Zettlemoyer,\nand Wen-tau Yih. 2018b. Dissecting contextual\nword embeddings: Architecture and representation.\nInProceedings of the 2018 Conference on Empiri-\ncal Methods in Natural Language Processing , pages\n1499–1509.\nAlec Radford, Karthik Narasimhan, Tim Salimans, and\nIlya Sutskever. 2018. Improving language under-\nstanding with unsupervised learning. Technical re-\nport, OpenAI.\nPranav Rajpurkar, Jian Zhang, Konstantin Lopyrev, and\nPercy Liang. 2016. Squad: 100,000+ questions for\nmachine comprehension of text. In Proceedings of\nthe 2016 Conference on Empirical Methods in Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, \n\n## Context #3\nf-the-art re-\nsults on eleven natural language processing\ntasks, including pushing the GLUE score to\n80.5% (7.7% point absolute improvement),\nMultiNLI accuracy to 86.7% (4.6% absolute\nimprovement), SQuAD v1.1 question answer-\ning Test F1 to 93.2 (1.5 point absolute im-\nprovement) and SQuAD v2.0 Test F1 to 83.1\n(5.1 point absolute improvement).\n1 Introduction\nLanguage model pre-training has been shown to\nbe effective for improving many natural language\nprocessing tasks (Dai and Le, 2015; Peters et al.,\n2018a; Radford et al., 2018; Howard and Ruder,\n2018). These include sentence-level tasks such as\nnatural language inference (Bowman et al., 2015;\nWilliams et al., 2018) and paraphrasing (Dolan\nand Brockett, 2005), which aim to predict the re-\nlationships between sentences by analyzing them\nholistically, as well as token-level tasks such as\nnamed entity recognition and question answering,\nwhere models are required to produce ﬁne-grained\noutput at the token level (Tjong Kim Sang and\nDe Meulder, 2003; Rajpurkar et \n\n## Context #4\nn Nat-\nural Language Processing , pages 2383–2392.\nMinjoon Seo, Aniruddha Kembhavi, Ali Farhadi, and\nHannaneh Hajishirzi. 2017. Bidirectional attention\nﬂow for machine comprehension. In ICLR .\nRichard Socher, Alex Perelygin, Jean Wu, Jason\nChuang, Christopher D Manning, Andrew Ng, and\nChristopher Potts. 2013. Recursive deep models\nfor semantic compositionality over a sentiment tree-\nbank. In Proceedings of the 2013 conference on\nempirical methods in natural language processing ,\npages 1631–1642.\nFu Sun, Linyang Li, Xipeng Qiu, and Yang Liu.\n2018. U-net: Machine reading comprehension\nwith unanswerable questions. arXiv preprint\narXiv:1810.06638 .\nWilson L Taylor. 1953. Cloze procedure: A new\ntool for measuring readability. Journalism Bulletin ,\n30(4):415–433.\nErik F Tjong Kim Sang and Fien De Meulder.\n2003. Introduction to the conll-2003 shared task:\nLanguage-independent named entity recognition. In\nCoNLL .\nJoseph Turian, Lev Ratinov, and Yoshua Bengio. 2010.\nWord representations: A simple and general method\nfo\n\n## Context #5\nnguage models are\nunidirectional, and this limits the choice of archi-\ntectures that can be used during pre-training. For\nexample, in OpenAI GPT, the authors use a left-to-\nright architecture, where every token can only at-\ntend to previous tokens in the self-attention layers\nof the Transformer (Vaswani et al., 2017). Such re-\nstrictions are sub-optimal for sentence-level tasks,\nand could be very harmful when applying ﬁne-\ntuning based approaches to token-level tasks such\nas question answering, where it is crucial to incor-\nporate context from both directions.\nIn this paper, we improve the ﬁne-tuning based\napproaches by proposing BERT: Bidirectional\nEncoder Representations from Transformers.\nBERT alleviates the previously mentioned unidi-\nrectionality constraint by using a “masked lan-\nguage model” (MLM) pre-training objective, in-\nspired by the Cloze task (Taylor, 1953). The\nmasked language model randomly masks some of\nthe tokens from the input, and the objective is to\npredict the original vocabulary id of t\n\n\n# Question\nWhat is the name of the new language representation model discussed in the research paper?",
+        "history": []
+      },
+      "output": {
+        "answer": "The name of the new language representation model discussed in the research paper is BERT: Bidirectional Encoder Representations from Transformers."
+      },
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "4b351e2b-5148-42e1-94d2-5bf28e909a68_0",
+      "start_time": "2025-02-27T08:50:54.861036Z",
+      "end_time": "2025-02-27T08:50:56.379678Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 1.518642
+      },
+      "result": {
+        "answer": "The name of the new language representation model discussed in the research paper is BERT: Bidirectional Encoder Representations from Transformers."
+      },
+      "message_format": "basic"
+    }
+  ]
+}
