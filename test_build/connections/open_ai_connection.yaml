@@ -1,0 +1,12 @@
+$schema: 
+  https://azuremlschemas.azureedge.net/promptflow/latest/AzureOpenAIConnection.schema.json
+type: azure_open_ai
+name: open_ai_connection
+module: promptflow.connections
+api_base: https://aoai-sweden-505.openai.azure.com/
+api_key: ${env:OPEN_AI_CONNECTION_API_KEY}
+api_type: azure
+api_version: '2024-02-01'
+auth_mode: key
+resource_id: 
+  /subscriptions/f804f2da-c27b-45ac-bf80-16d4d331776d/resourceGroups/re-aoai-505/providers/Microsoft.CognitiveServices/accounts/aoai-sweden-505

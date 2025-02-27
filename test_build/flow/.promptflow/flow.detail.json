@@ -1,0 +1,311 @@
+{
+  "flow_runs": [
+    {
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "status": "Completed",
+      "error": null,
+      "inputs": {
+        "chat_history": [],
+        "pdf_url": "https://arxiv.org/pdf/1810.04805.pdf",
+        "question": "what is BERT?",
+        "config": {
+          "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+          "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+          "PROMPT_TOKEN_LIMIT": 3000,
+          "MAX_COMPLETION_TOKENS": 1024,
+          "VERBOSE": true,
+          "CHUNK_SIZE": 1024,
+          "CHUNK_OVERLAP": 64
+        }
+      },
+      "output": {
+        "answer": "BERT steht in diesem Kontext für \"Bidirectional Encoder Representations from Transformers\".",
+        "context": [
+          "BERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,",
+          "e 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L",
+          "g BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no",
+          "m one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p",
+          ".\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc"
+        ]
+      },
+      "metrics": null,
+      "request": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "root_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "source_run_id": null,
+      "flow_id": "default_flow_id",
+      "start_time": "2025-02-27T12:27:18.743509Z",
+      "end_time": "2025-02-27T12:27:37.073909Z",
+      "index": 0,
+      "api_calls": [
+        {
+          "name": "flow",
+          "node_name": "flow",
+          "type": "Flow",
+          "start_time": 1740659238.743509,
+          "end_time": 1740659257.073909,
+          "children": [],
+          "system_metrics": {
+            "duration": 18.3304,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0
+          },
+          "inputs": {
+            "chat_history": [],
+            "pdf_url": "https://arxiv.org/pdf/1810.04805.pdf",
+            "question": "what is BERT?",
+            "config": {
+              "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+              "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+              "PROMPT_TOKEN_LIMIT": 3000,
+              "MAX_COMPLETION_TOKENS": 1024,
+              "VERBOSE": true,
+              "CHUNK_SIZE": 1024,
+              "CHUNK_OVERLAP": 64
+            }
+          },
+          "output": {
+            "answer": "BERT steht in diesem Kontext für \"Bidirectional Encoder Representations from Transformers\".",
+            "context": [
+              "BERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,",
+              "e 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L",
+              "g BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no",
+              "m one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p",
+              ".\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc"
+            ]
+          },
+          "error": null
+        }
+      ],
+      "name": "",
+      "description": "",
+      "tags": null,
+      "system_metrics": {
+        "duration": 18.3304,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "result": {
+        "answer": "BERT steht in diesem Kontext für \"Bidirectional Encoder Representations from Transformers\".",
+        "context": [
+          "BERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,",
+          "e 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L",
+          "g BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no",
+          "m one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p",
+          ".\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc"
+        ]
+      },
+      "upload_metrics": false,
+      "otel_trace_id": null,
+      "message_format": "basic"
+    }
+  ],
+  "node_runs": [
+    {
+      "node": "setup_env",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_setup_env_0",
+      "status": "Completed",
+      "inputs": {
+        "connection": "open_ai_connection",
+        "config": {
+          "EMBEDDING_MODEL_DEPLOYMENT_NAME": "text-embedding-ada-002",
+          "CHAT_MODEL_DEPLOYMENT_NAME": "gpt-4",
+          "PROMPT_TOKEN_LIMIT": 3000,
+          "MAX_COMPLETION_TOKENS": 1024,
+          "VERBOSE": true,
+          "CHUNK_SIZE": 1024,
+          "CHUNK_OVERLAP": 64
+        }
+      },
+      "output": "Ready",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:18.747155Z",
+      "end_time": "2025-02-27T12:27:18.748611Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.001456
+      },
+      "result": "Ready",
+      "message_format": "basic"
+    },
+    {
+      "node": "download_tool",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_download_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "url": "https://arxiv.org/pdf/1810.04805.pdf",
+        "env_ready_signal": "Ready"
+      },
+      "output": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:18.751211Z",
+      "end_time": "2025-02-27T12:27:35.611983Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T12:27:35+0000] Pdf already exists in /home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf\n",
+        "stderr": "[2025-02-27T12:27:18+0000] 6.96s - thread._ident is None in _get_related_thread!\n"
+      },
+      "system_metrics": {
+        "duration": 16.860772
+      },
+      "result": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf",
+      "message_format": "basic"
+    },
+    {
+      "node": "rewrite_question_tool",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_rewrite_question_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "question": "what is BERT?",
+        "history": [],
+        "env_ready_signal": "Ready"
+      },
+      "output": "What does BERT stand for in the context of natural language processing?",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:18.753756Z",
+      "end_time": "2025-02-27T12:27:36.285923Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T12:27:36+0000] Rewritten question: What does BERT stand for in the context of natural language processing?\n",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 17.532167
+      },
+      "result": "What does BERT stand for in the context of natural language processing?",
+      "message_format": "basic"
+    },
+    {
+      "node": "build_index_tool",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_build_index_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "pdf_path": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf"
+      },
+      "output": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64",
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:35.614181Z",
+      "end_time": "2025-02-27T12:27:35.617663Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "[2025-02-27T12:27:35+0000] Chunk size: 1024, chunk overlap: 64\n[2025-02-27T12:27:35+0000] Index path: /home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64\n[2025-02-27T12:27:35+0000] Index already exists, bypassing index creation\n",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.003482
+      },
+      "result": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64",
+      "message_format": "basic"
+    },
+    {
+      "node": "find_context_tool",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_find_context_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "question": "What does BERT stand for in the context of natural language processing?",
+        "index_path": "/home/azureuser/promptflow-demo/chat-with-pdf/flow/chat_with_pdf/.index/.pdfs/https___arxiv.org_pdf_1810.04805.pdf.pdf.index_1024_64"
+      },
+      "output": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nBERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,\n\n## Context #2\ne 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L\n\n## Context #3\ng BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no\n\n## Context #4\nm one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p\n\n## Context #5\n.\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc\n\n\n# Question\nWhat does BERT stand for in the context of natural language processing?",
+        "context": [
+          "BERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,",
+          "e 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L",
+          "g BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no",
+          "m one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p",
+          ".\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc"
+        ]
+      },
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:36.287181Z",
+      "end_time": "2025-02-27T12:27:36.346224Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.059043
+      },
+      "result": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nBERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,\n\n## Context #2\ne 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L\n\n## Context #3\ng BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no\n\n## Context #4\nm one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p\n\n## Context #5\n.\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc\n\n\n# Question\nWhat does BERT stand for in the context of natural language processing?",
+        "context": [
+          "BERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,",
+          "e 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L",
+          "g BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no",
+          "m one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p",
+          ".\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc"
+        ]
+      },
+      "message_format": "basic"
+    },
+    {
+      "node": "qna_tool",
+      "flow_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814",
+      "run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_qna_tool_0",
+      "status": "Completed",
+      "inputs": {
+        "prompt": "You're a smart assistant can answer questions based on provided context and previous conversation history between you and human.\n\nUse the context to answer the question at the end, note that the context has order and importance - e.g. context #1 is more important than #2.\n\nTry as much as you can to answer based on the provided the context, if you cannot derive the answer from the context, you should say you don't know.\nAnswer in the same language as the question.\n\n# Context\n\n## Context #1\nBERT: Pre-training of Deep Bidirectional Transformers for\nLanguage Understanding\nJacob Devlin Ming-Wei Chang Kenton Lee Kristina Toutanova\nGoogle AI Language\nfjacobdevlin,mingweichang,kentonl,kristout g@google.com\nAbstract\nWe introduce a new language representa-\ntion model called BERT , which stands for\nBidirectional Encoder Representations from\nTransformers. Unlike recent language repre-\nsentation models (Peters et al., 2018a; Rad-\nford et al., 2018), BERT is designed to pre-\ntrain deep bidirectional representations from\nunlabeled text by jointly conditioning on both\nleft and right context in all layers. As a re-\nsult, the pre-trained BERT model can be ﬁne-\ntuned with just one additional output layer\nto create state-of-the-art models for a wide\nrange of tasks, such as question answering and\nlanguage inference, without substantial task-\nspeciﬁc architecture modiﬁcations.\nBERT is conceptually simple and empirically\npowerful. It obtains new state-of-the-art re-\nsults on eleven natural language processing\ntasks,\n\n## Context #2\ne 1 will serve\nas a running example for this section.\nA distinctive feature of BERT is its uniﬁed ar-\nchitecture across different tasks. There is mini-mal difference between the pre-trained architec-\nture and the ﬁnal downstream architecture.\nModel Architecture BERT’s model architec-\nture is a multi-layer bidirectional Transformer en-\ncoder based on the original implementation de-\nscribed in Vaswani et al. (2017) and released in\nthetensor2tensor library.1Because the use\nof Transformers has become common and our im-\nplementation is almost identical to the original,\nwe will omit an exhaustive background descrip-\ntion of the model architecture and refer readers to\nVaswani et al. (2017) as well as excellent guides\nsuch as “The Annotated Transformer.”2\nIn this work, we denote the number of layers\n(i.e., Transformer blocks) as L, the hidden size as\nH, and the number of self-attention heads as A.3\nWe primarily report results on two model sizes:\nBERT BASE (L=12, H=768, A=12, Total Param-\neters=110M) and BERT LARGE (L\n\n## Context #3\ng BERT\nFine-tuning is straightforward since the self-\nattention mechanism in the Transformer al-\nlows BERT to model many downstream tasks—\nwhether they involve single text or text pairs—by\nswapping out the appropriate inputs and outputs.\nFor applications involving text pairs, a common\npattern is to independently encode text pairs be-\nfore applying bidirectional cross attention, such\nas Parikh et al. (2016); Seo et al. (2017). BERT\ninstead uses the self-attention mechanism to unify\nthese two stages, as encoding a concatenated text\npair with self-attention effectively includes bidi-\nrectional cross attention between two sentences.\nFor each task, we simply plug in the task-\nspeciﬁc inputs and outputs into BERT and ﬁne-\ntune all the parameters end-to-end. At the in-\nput, sentence Aand sentence Bfrom pre-training\nare analogous to (1) sentence pairs in paraphras-\ning, (2) hypothesis-premise pairs in entailment, (3)\nquestion-passage pairs in question answering, and(4) a degenerate text- ?pair in text classiﬁcation\no\n\n## Context #4\nm one or more layers without ﬁne-tuning\nany parameters of BERT. These contextual em-\nbeddings are used as input to a randomly initial-\nized two-layer 768-dimensional BiLSTM before\nthe classiﬁcation layer.\nResults are presented in Table 7. BERT LARGE\nperforms competitively with state-of-the-art meth-\nods. The best performing method concatenates the\ntoken representations from the top four hidden lay-\ners of the pre-trained Transformer, which is only\n0.3 F1 behind ﬁne-tuning the entire model. This\ndemonstrates that BERT is effective for both ﬁne-\ntuning and feature-based approaches.\n6 Conclusion\nRecent empirical improvements due to transfer\nlearning with language models have demonstrated\nthat rich, unsupervised pre-training is an integral\npart of many language understanding systems. In\nparticular, these results enable even low-resource\ntasks to beneﬁt from deep unidirectional architec-\ntures. Our major contribution is further general-\nizing these ﬁndings to deep bidirectional architec-\ntures, allowing the same p\n\n## Context #5\n.\n• We show that pre-trained representations reduce\nthe need for many heavily-engineered task-\nspeciﬁc architectures. BERT is the ﬁrst ﬁne-\ntuning based representation model that achieves\nstate-of-the-art performance on a large suite\nof sentence-level andtoken-level tasks, outper-\nforming many task-speciﬁc architectures.\n• BERT advances the state of the art for eleven\nNLP tasks. The code and pre-trained mod-\nels are available at https://github.com/\ngoogle-research/bert .\n2 Related Work\nThere is a long history of pre-training general lan-\nguage representations, and we brieﬂy review the\nmost widely-used approaches in this section.\n2.1 Unsupervised Feature-based Approaches\nLearning widely applicable representations of\nwords has been an active area of research for\ndecades, including non-neural (Brown et al., 1992;\nAndo and Zhang, 2005; Blitzer et al., 2006) and\nneural (Mikolov et al., 2013; Pennington et al.,\n2014) methods. Pre-trained word embeddings\nare an integral part of modern NLP systems, of-\nfering signiﬁc\n\n\n# Question\nWhat does BERT stand for in the context of natural language processing?",
+        "history": []
+      },
+      "output": {
+        "answer": "BERT steht in diesem Kontext für \"Bidirectional Encoder Representations from Transformers\"."
+      },
+      "metrics": null,
+      "error": null,
+      "parent_run_id": "d21c1fbc-1636-400d-8fc4-75dfc0898814_0",
+      "start_time": "2025-02-27T12:27:36.347289Z",
+      "end_time": "2025-02-27T12:27:37.071534Z",
+      "index": 0,
+      "api_calls": [],
+      "cached_run_id": null,
+      "cached_flow_run_id": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "system_metrics": {
+        "duration": 0.724245
+      },
+      "result": {
+        "answer": "BERT steht in diesem Kontext für \"Bidirectional Encoder Representations from Transformers\"."
+      },
+      "message_format": "basic"
+    }
+  ]
+}
