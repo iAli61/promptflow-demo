@@ -1,0 +1,50 @@
+{
+    "package": {},
+    "code": {
+        "parse_score.py": {
+            "type": "python",
+            "inputs": {
+                "gpt_score": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "parse_score.py",
+            "function": "parse_score"
+        },
+        "aggregate.py": {
+            "type": "python",
+            "inputs": {
+                "perceived_intelligence_score": {
+                    "type": [
+                        "object"
+                    ]
+                }
+            },
+            "source": "aggregate.py",
+            "function": "aggregate"
+        },
+        "gpt_perceived_intelligence.md": {
+            "type": "llm",
+            "inputs": {
+                "answer": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "question": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "context": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "gpt_perceived_intelligence.md"
+        }
+    }
+}

@@ -1,0 +1,121 @@
+{
+    "package": {},
+    "code": {
+        "prompts/coherence.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "Document": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "Summary": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "prompts/coherence.jinja2"
+        },
+        "geval.py": {
+            "type": "python",
+            "inputs": {
+                "prompt_with_src_and_gen": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "max_score": {
+                    "type": [
+                        "double"
+                    ]
+                },
+                "connection": {
+                    "type": [
+                        "AzureOpenAIConnection"
+                    ]
+                },
+                "deployment_name": {
+                    "type": [
+                        "string"
+                    ],
+                    "default": "gpt-4"
+                }
+            },
+            "description": "Using GPT, evaluate a generated summary with respect to a source document from\nwhich it was generated. This function should be used for four dimensions of\nsummarization evaluation inline with the SummEval benchmark: fluency, coherence,\nconsistency, relevance.\n\nArgs:\n    prompt_with_src_and_gen (str): The prompt containing the source document and generated summary.\n    max_score (float): The maximum score allowed.\n    connection (AzureOpenAIConnection): The connection object for Azure OpenAI.\n    deployment_name (str, optional): The name of the deployment. Defaults to \"gpt-4\".\n\nReturns:\n    float: The evaluation score",
+            "source": "geval.py",
+            "function": "geval_summarization"
+        },
+        "prompts/consistency.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "Document": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "Summary": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "prompts/consistency.jinja2"
+        },
+        "prompts/fluency.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "Summary": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "prompts/fluency.jinja2"
+        },
+        "prompts/relevance.jinja2": {
+            "type": "prompt",
+            "inputs": {
+                "Document": {
+                    "type": [
+                        "string"
+                    ]
+                },
+                "Summary": {
+                    "type": [
+                        "string"
+                    ]
+                }
+            },
+            "source": "prompts/relevance.jinja2"
+        },
+        "average_scores.py": {
+            "type": "python",
+            "inputs": {
+                "fluency_list": {
+                    "type": [
+                        "object"
+                    ]
+                },
+                "consistency_list": {
+                    "type": [
+                        "object"
+                    ]
+                },
+                "relevance_list": {
+                    "type": [
+                        "object"
+                    ]
+                },
+                "coherence_list": {
+                    "type": [
+                        "object"
+                    ]
+                }
+            },
+            "description": "Takes list of scores for 4 dims and outputs average for them.\n\nArgs:\n    fluency_list (List(float)): list of fluency scores\n    consistency_list (List(float)): list of consistency scores\n    relevance_list (List(float)): list of relevance scores\n    coherence_list (List(float)): list of coherence scores\n\nReturns:\n    Dict[str, float]: Returns average scores",
+            "source": "average_scores.py",
+            "function": "aggregate"
+        }
+    }
+}
