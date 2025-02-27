@@ -1,0 +1,38 @@
+{
+  "flow_runs": [
+    {
+      "run_id": "857bc06c-824b-4fbd-86f4-d522cd153db7_0",
+      "status": "Completed",
+      "error": null,
+      "inputs": {
+        "question": "Who is the most famous person in the world?"
+      },
+      "output": {
+        "output": "Determining the most famous person in the world is subjective and can vary depending on the context and criteria used, such as historical impact, global recognition, or current popularity. Figures like Jesus Christ, Muhammad, and Buddha are historically significant, while contemporary figures like Elon Musk, Cristiano Ronaldo, and Dwayne \"The Rock\" Johnson are widely recognized today. Celebrity fame can also fluctuate rapidly with current events and media coverage."
+      },
+      "metrics": null,
+      "request": null,
+      "parent_run_id": "857bc06c-824b-4fbd-86f4-d522cd153db7",
+      "root_run_id": "857bc06c-824b-4fbd-86f4-d522cd153db7",
+      "source_run_id": null,
+      "flow_id": "default_flow_id",
+      "start_time": "2025-02-27T14:37:16.125998Z",
+      "end_time": "2025-02-27T14:37:18.569515Z",
+      "index": 0,
+      "api_calls": [],
+      "name": "",
+      "description": "",
+      "tags": null,
+      "system_metrics": {
+        "duration": 2.443517
+      },
+      "result": {
+        "output": "Determining the most famous person in the world is subjective and can vary depending on the context and criteria used, such as historical impact, global recognition, or current popularity. Figures like Jesus Christ, Muhammad, and Buddha are historically significant, while contemporary figures like Elon Musk, Cristiano Ronaldo, and Dwayne \"The Rock\" Johnson are widely recognized today. Celebrity fame can also fluctuate rapidly with current events and media coverage."
+      },
+      "upload_metrics": false,
+      "otel_trace_id": null,
+      "message_format": "basic"
+    }
+  ],
+  "node_runs": []
+}
